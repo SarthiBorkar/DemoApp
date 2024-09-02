@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web3 Salary Platform</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+</head>
+<body>
+    <h1>Web3 Salary Platform</h1>
+    <div>
+        <label for="employee">Employee Address:</label>
+        <input type="text" id="employee" />
+    </div>
+    <div>
+        <label for="hours">Hours Worked:</label>
+        <input type="number" id="hours" />
+    </div>
+    <button onclick="logHours()">Log Hours</button>
+    <button onclick="payEmployee()">Pay Employee</button>
+
+    <script>
+        const web3 = new Web3(Web3.givenProvider || 'http://localhost:8545');
+        const contractAddress = 'YOUR_DEPLOYED_CONTRACT_ADDRESS';
+        const contractABI = [/* ABI from compiled contract */];
+        const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+        async function logHours() {
+            const employee = document.getElementById('employee').value;
+            const hours = document.getElementById('hours').value;
+            const accounts = await web3.eth.getAccounts();
+            await contract.methods.logHours(employee, hours).send({ from: accounts[0] });
+        }
+
+        async function payEmployee() {
+            const employee = document.getElementById('employee').value;
+            const accounts = await web3.eth.getAccounts();
+            await contract.methods.payEmployee(employee).send({ from: accounts[0] });
+        }
+    </script>
+</body>
+</html>
